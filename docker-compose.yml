@@ -16,10 +16,25 @@ services:
         image: nginx:alpine
         restart: unless-stopped
         ports:
-            - "8989:80"
+            - "8000:80"
         volumes:
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
+        networks:
+            - application-network
+    node:
+        build:
+            context: .
+            dockerfile: Dockerfile.node
+        image: node
+        container_name: node
+        ports:
+            - "3000:3000"
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+            - /var/www/node_modules
         networks:
             - application-network
      # db mysql ${DB_DATABASE} //Busca do arquivo .env
@@ -35,7 +50,7 @@ services:
         volumes:
             - ./.docker/mysql/dbdata:/var/lib/mysql
         ports:
-            - "3388:3306"
+            - "3306:3306"
         networks:
             - application-network
 
@@ -48,7 +63,7 @@ services:
         environment:
             - PMA_ARBITRARY=1
         ports:
-            - 8899:80
+            - 8081:80
         networks:
             - application-network
 
