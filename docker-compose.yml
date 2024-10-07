@@ -10,6 +10,8 @@ services:
             - ./:/var/www
         networks:
             - application-network
+        depends_on:
+            - mysql
     # nginx
     nginx:
         container_name: nginx
@@ -77,6 +79,6 @@ networks:
 
 #PHPMYADMIN info no file
 # servidor: mysql
-# user: root
-# pass: root
+# user: admin
+# pass: admin
 
