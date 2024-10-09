@@ -24,22 +24,6 @@ services:
             - ./docker/nginx/:/etc/nginx/conf.d/
         networks:
             - application-network
-    node:
-        build:
-            context: .
-            dockerfile: Dockerfile.node
-        image: node
-        container_name: node
-        ports:
-            - "3000:3000"
-        restart: unless-stopped
-        working_dir: /var/www
-        volumes:
-            - ./:/var/www
-            - /var/www/node_modules
-        networks:
-            - application-network
-     # db mysql ${DB_DATABASE} //Busca do arquivo .env
     mysql:
         container_name: mysql
         image: mysql:8.0
