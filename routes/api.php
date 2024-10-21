@@ -14,7 +14,7 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::post('logout', [JWTAuthController::class, 'logout']);
 
     // Post
-    Route::get('post/', [PostController::class, 'index']);
+    Route::get('post', [PostController::class, 'index']);
     Route::post('post/{id}', [PostController::class, 'show']);
     Route::post('post', [PostController::class, 'store']);
     Route::put('post/{id}', [PostController::class, 'update']);
