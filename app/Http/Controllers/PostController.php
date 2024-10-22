@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class PostController extends Controller
 {
+    use ValidatesRequests;
+
     public function __construct(protected readonly PostRepository $postRepository)
     {
 
@@ -48,7 +51,7 @@ class PostController extends Controller
         $data = $request->only([
             'title', 'image', 'description', 'content', 'user_id', 'published', 'published_at'
         ]);
-
+       
         $post = $this->postRepository->create($data);
 
         return response()->json($post, 201);
