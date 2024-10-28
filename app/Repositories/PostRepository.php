@@ -4,9 +4,25 @@ namespace App\Repositories;
 
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class PostRepository
 {
+    public function getAllFiltered(): Collection
+    {
+        return QueryBuilder::for(Post::class)
+            ->allowedFilters([
+                'title', 
+                'description', 
+                AllowedFilter::exact('user_id'),
+                AllowedFilter::exact('published'),
+                'content'
+            ])
+            ->allowedSorts('title', 'created_at', 'published_at')
+            ->get();
+    }
+
     public function getAllPublished(): Collection
     {
         return Post::published()->get();

@@ -20,7 +20,7 @@ class PostController extends Controller
 
     public function index(): JsonResponse
     {
-        $posts = $this->postRepository->getAllPublished();
+        $posts = $this->postRepository->getAllFiltered();
 
         return response()->json($posts);
     }
