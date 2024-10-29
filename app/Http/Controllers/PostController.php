@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
-use App\Models\Post;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use App\Http\Requests\Post\StoreRequest;
+use App\Http\Requests\Post\UpdateRequest;
+use App\Http\Requests\Post\SearchRequest;
+
 
 class PostController extends Controller
 {
@@ -36,28 +38,15 @@ class PostController extends Controller
         return response()->json($post);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreRequest $request): JsonResponse
     {
-        $this->validate($request, [
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|string',
-            'description' => 'required|string',
-            'content' => 'nullable|string',
-            'user_id' => 'required|exists:users,id',
-            'published' => 'boolean',
-            'published_at' => 'nullable|date',
-        ]);
-
-        $data = $request->only([
-            'title', 'image', 'description', 'content', 'user_id', 'published', 'published_at'
-        ]);
-       
+        $data = $request->validated();
         $post = $this->postRepository->create($data);
 
         return response()->json($post, 201);
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(UpdateRequest $request, $id): JsonResponse
     {
         $post = $this->postRepository->findById($id);
 
@@ -65,19 +54,7 @@ class PostController extends Controller
             return response()->json(['error' => 'Post not found'], 404);
         }
 
-        $this->validate($request, [
-            'title' => 'sometimes|required|string|max:255',
-            'image' => 'nullable|string',
-            'description' => 'sometimes|required|string',
-            'content' => 'nullable|string',
-            'published' => 'boolean',
-            'published_at' => 'nullable|date',
-        ]);
-
-        $data = $request->only([
-            'title', 'image', 'description', 'content', 'published', 'published_at'
-        ]);
-
+        $data = $request->validated();
         $this->postRepository->update($post, $data);
 
         return response()->json($post);
@@ -96,9 +73,10 @@ class PostController extends Controller
         return response()->json(['message' => 'Post deleted successfully'], 200);
     }
 
-    public function search(Request $request): JsonResponse
+    public function search(SearchRequest $request): JsonResponse
     {
-        $term = $request->get('term', '');
+        $$validated = $request->validated();
+        $term = $validated['term'] ?? '';
         $posts = $this->postRepository->searchPosts($term);
 
         return response()->json($posts);
