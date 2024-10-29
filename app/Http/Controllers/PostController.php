@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\PostRepository;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Http\Requests\Post\StoreRequest;
