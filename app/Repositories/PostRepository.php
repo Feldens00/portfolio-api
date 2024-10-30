@@ -9,18 +9,18 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class PostRepository
 {
-    public function getAllFiltered(): Collection
+    public function getAllFiltered(array $filters = []): Collection
     {
         return QueryBuilder::for(Post::class)
-            ->allowedFilters([
-                'title', 
-                'description', 
-                AllowedFilter::exact('user_id'),
-                AllowedFilter::exact('published'),
-                'content'
-            ])
-            ->allowedSorts('title', 'created_at', 'published_at')
-            ->get();
+        ->allowedFilters([
+            AllowedFilter::exact('title'),
+            AllowedFilter::exact('description'),
+            AllowedFilter::exact('user_id'),
+            AllowedFilter::exact('published')
+        ])
+        ->allowedSorts(['title', 'created_at', 'published_at'])
+        ->where($filters)
+        ->get();
     }
 
     public function getAllPublished(): Collection

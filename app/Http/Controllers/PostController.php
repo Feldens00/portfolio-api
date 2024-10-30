@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Requests\Post\UpdateRequest;
 use App\Http\Requests\Post\SearchRequest;
+use App\Http\Requests\Post\FilterRequest;
 
 
 class PostController extends Controller
@@ -19,9 +20,10 @@ class PostController extends Controller
 
     }
 
-    public function index(): JsonResponse
+    public function index(FilterRequest $request): JsonResponse
     {
-        $posts = $this->postRepository->getAllFiltered();
+        $filters = $request->validated();
+        $posts = $this->postRepository->getAllFiltered($filters);
 
         return response()->json($posts);
     }
