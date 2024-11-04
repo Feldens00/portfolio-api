@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JWTAuthController;
 use App\Http\Controllers\PostController;
@@ -10,14 +11,21 @@ Route::post('login', [JWTAuthController::class, 'login']);
 
 Route::middleware([JwtMiddleware::class])->group(function () {
     // Login
-    Route::get('user', [JWTAuthController::class, 'getUser']);
+    Route::get('users', [JWTAuthController::class, 'getUser']);
     Route::post('logout', [JWTAuthController::class, 'logout']);
 
-    // Post
-    Route::get('post', [PostController::class, 'index']);
-    Route::post('post/{id}', [PostController::class, 'show']);
-    Route::post('post', [PostController::class, 'store']);
-    Route::put('post/{id}', [PostController::class, 'update']);
-    Route::get('post/search', [PostController::class, 'search']);
-    Route::delete('post/{id}', [PostController::class, 'delete']);
+    // Posts
+    Route::get('posts', [PostController::class, 'index']);
+    Route::post('posts/{id}', [PostController::class, 'show']);
+    Route::post('posts', [PostController::class, 'store']);
+    Route::put('posts/{id}', [PostController::class, 'update']);
+    Route::get('posts/search', [PostController::class, 'search']);
+    Route::delete('posts/{id}', [PostController::class, 'delete']);
+
+    // Accounts
+    Route::get('accounts', [AccountController::class, 'index']);
+    Route::get('accounts/{id}', [AccountController::class, 'show']);
+    Route::post('accounts', [AccountController::class, 'store']);
+    Route::put('accounts/{id}', [AccountController::class, 'update']);
+    Route::delete('accounts/{id}', [AccountController::class, 'delete']);
 });

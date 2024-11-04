@@ -2,62 +2,33 @@
 
 namespace App\Repositories;
 
-use App\Models\Post;
+use App\Models\Account;
 use Illuminate\Database\Eloquent\Collection;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
 
-class PostRepository
+class AccountRepository
 {
-    public function getAllFiltered(array $filters = []): Collection
+    public function getAll(): Collection
     {
-        return QueryBuilder::for(Post::class)
-        ->allowedFilters([
-            AllowedFilter::exact('title'),
-            AllowedFilter::exact('description'),
-            AllowedFilter::exact('user_id'),
-            AllowedFilter::exact('published')
-        ])
-        ->allowedSorts(['title', 'created_at', 'published_at'])
-        ->where($filters)
-        ->get();
+        return Account::all();
     }
 
-    public function getAllPublished(): Collection
+    public function findById(int $id): ?Account
     {
-        return Post::published()->get();
+        return Account::find($id);
     }
 
-    public function findById(int $id): ?Post
+    public function create(array $data): Account
     {
-        return Post::find($id);
+        return Account::create($data);
     }
 
-    public function getPostsByUser(int $userId): Collection
+    public function update(Account $account, array $data): bool
     {
-        return Post::where('user_id', $userId)->get();
+        return $account->update($data);
     }
 
-    public function searchPosts(string $term): Collection
+    public function delete(Account $account): bool
     {
-        return Post::where('title', 'like', '%' . $term . '%')
-            ->orWhere('description', 'like', '%' . $term . '%')
-            ->published()
-            ->get();
-    }
-
-    public function create(array $data): Post
-    {
-        return Post::create($data);
-    }
-
-    public function update(Post $post, array $data): bool
-    {
-        return $post->update($data);
-    }
-
-    public function delete(Post $post): ?bool
-    {
-        return $post->delete();
+        return $account->delete();
     }
 }
