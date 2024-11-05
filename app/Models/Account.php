@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
@@ -17,7 +18,16 @@ class Account extends Model
         'account_number',
     ];
 
-    public function owner()
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:Y-m-d H:i:s',
+            'updated_at' => 'datetime:Y-m-d H:i:s',
+            'deleted_at' => 'datetime:Y-m-d H:i:s',
+        ];
+    }
+
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
