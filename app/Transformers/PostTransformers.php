@@ -15,7 +15,7 @@ class PostTransformer extends TransformerAbstract
             'title' => $post->title,
             'description' => $post->description,
             'image' => $post->image,
-            'published' => (bool) $post->published,
+            'published' => $post->published,
             'published_at' => $post->published_at,
             'created_at' => $post->created_at,
             'updated_at' => $post->updated_at,

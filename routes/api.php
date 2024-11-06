@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JWTAuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Middleware\JwtMiddleware;
+use App\Models\Post;
 
 Route::post('register', [JWTAuthController::class, 'register']);
 Route::post('login', [JWTAuthController::class, 'login']);
@@ -16,9 +17,10 @@ Route::middleware([JwtMiddleware::class])->group(function () {
 
     // Posts
     Route::get('posts', [PostController::class, 'index']);
+    Route::get('/posts/{id}/edit', 'PostController@edit');
     Route::post('posts/{id}', [PostController::class, 'show']);
     Route::post('posts', [PostController::class, 'store']);
-    Route::put('posts/{id}', [PostController::class, 'update']);
+    Route::put('posts/{id}', [PostController::class, 'update'])->middleware('acl:' . Post::class . ',edit');
     Route::get('posts/search', [PostController::class, 'search']);
     Route::delete('posts/{id}', [PostController::class, 'delete']);
 

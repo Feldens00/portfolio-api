@@ -13,6 +13,12 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const PERMISSIONS = [
+        'view' => 'view_post',
+        'edit' => 'edit_post',
+        'delete' => 'delete_post',
+    ];
+
     protected $table = 'posts';
 
     protected $fillable = [

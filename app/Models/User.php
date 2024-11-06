@@ -5,13 +5,13 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Account;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Model implements JWTSubject
 {
     use HasFactory, Notifiable, SoftDeletes;
 
@@ -47,8 +47,25 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function hasPermissionFor(string $permissionName, Model $permissible): bool
+    {
+        return $this->permissions()
+            ->where('permissions.name', $permissionName)
+            ->wherePivot('permissible_id', $permissible->id)
+            ->wherePivot('permissible_type', get_class($permissible))
+            ->exists();
+    }
+
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account_id');
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'user_permissions')
+                    ->withPivot('permissible_type', 'permissible_id')
+                    ->withTimestamps();
+    }
+
 }
