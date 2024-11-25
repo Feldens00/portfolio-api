@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\PermissionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -47,12 +49,11 @@ class User extends Model implements JWTSubject
         return [];
     }
 
-    public function hasPermissionFor(string $permissionName, Model $permissible): bool
+    public function hasPermissionFor(string $permissionName, PermissionType $type): bool
     {
         return $this->permissions()
             ->where('permissions.name', $permissionName)
-            ->wherePivot('permissible_id', $permissible->id)
-            ->wherePivot('permissible_type', get_class($permissible))
+            ->where('permissions.type', $type->value)
             ->exists();
     }
 
@@ -64,7 +65,6 @@ class User extends Model implements JWTSubject
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'user_permissions')
-                    ->withPivot('permissible_type', 'permissible_id')
                     ->withTimestamps();
     }
 

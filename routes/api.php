@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PermissionType;
 use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JWTAuthController;
@@ -20,7 +21,7 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::get('/posts/{id}/edit', 'PostController@edit');
     Route::post('posts/{id}', [PostController::class, 'show']);
     Route::post('posts', [PostController::class, 'store']);
-    Route::put('posts/{id}', [PostController::class, 'update'])->middleware('acl:' . Post::class . ',edit');
+    Route::put('posts/{id}', [PostController::class, 'update'])->middleware('acl:edit,' . PermissionType::POST->value);
     Route::get('posts/search', [PostController::class, 'search']);
     Route::delete('posts/{id}', [PostController::class, 'delete']);
 

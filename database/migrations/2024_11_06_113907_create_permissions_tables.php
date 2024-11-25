@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedSmallInteger('type');
             $table->timestamps();
         });
 
@@ -17,7 +18,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('permission_id')->constrained('permissions')->onDelete('cascade');
-            $table->morphs('permissible');
             $table->timestamps();
         });
     }
