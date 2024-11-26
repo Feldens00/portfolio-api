@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 
 class AclMiddleware
 {
-    public function handle(Request $request, Closure $next, string $permissionName, string $type)
+    public function handle(Request $request, Closure $next, string $requiredAbility)
     {
         $user = $request->user();
-        $type = PermissionType::from(constant(PermissionType::class . "::" . strtoupper($type)));
 
-        if (!$use || !$user->hasPermissionFor($permissionName, $type)) {
+        if (!$user || !$user->hasAbility($requiredAbility)) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
         return $next($request);
     }
+}
