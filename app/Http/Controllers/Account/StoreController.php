@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Account;
 
 use App\Repositories\AccountRepository;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Http\Requests\Account\StoreRequest;

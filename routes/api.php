@@ -19,9 +19,9 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::get('posts', Post\IndexController::class);
     Route::post('posts/{id}', Post\ShowController::class);
     Route::post('posts', Post\StoreController::class);
-    Route::put('posts/{id}', UpdateController::class)->middleware('acl:edit_post,');
-    Route::get('posts/search', SearchController::class);
-    Route::delete('posts/{id}', DeleteController::class);
+    Route::put('posts/{id}', Post\UpdateController::class)->middleware('acl:edit_post,');
+    Route::get('posts/search', Post\SearchController::class);
+    Route::delete('posts/{id}', Post\DeleteController::class);
 
     // Accounts
     Route::get('accounts', Account\IndexController::class);

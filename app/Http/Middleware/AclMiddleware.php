@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class AclMiddleware
@@ -12,7 +11,7 @@ class AclMiddleware
     {
         $user = $request->user();
 
-        if (!$user || !$user->hasAbility($requiredAbility)) {
+        if (!$user || !$user->abilities()->contains('name', $requiredAbility)) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
 

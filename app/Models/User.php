@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable  implements JWTSubject
 {
@@ -52,19 +53,20 @@ class User extends Authenticatable  implements JWTSubject
         return $this->belongsTo(Account::class, 'account_id');
     }
 
-    public function roles()
+    public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
 
-    public function abilities()
+
+    public function abilities(): mixed
     {
-        return $this->roles->map->abilities->flatten()->pluck('name');
+        return $this->roles()->with('abilities')->get()->flatMap(fn($role) => $role->abilities)->unique('id');
     }
 
     public function hasAbility(string $abilityName): bool
     {
-        return $this->abilities()->contains('name', $abilityName);
+        return $this->abilities->pluck('name')->contains($abilityName);
     }
 
 }
