@@ -11,6 +11,27 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string|null $password
+ * @property Carbon|null $email_verified_at
+ * @property int|null $account_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * 
+ * Relations:
+ * @property Account|null $account
+ * @property Collection<int, Role> $roles
+ * @property Collection<int, Ability> $abilities
+ */
 
 class User extends Authenticatable  implements JWTSubject
 {
